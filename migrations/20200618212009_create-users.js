@@ -33,6 +33,6 @@ exports.up = function(knex) {
 };
 
 exports.down = function(knex) {
-    return knex.schema.dropTableIfExists('users')
-    .dropTableIfExists('saved_songs');
+    return knex.schema.dropTableIfExists('saved_songs')
+    .dropTableIfExists('users');
 };

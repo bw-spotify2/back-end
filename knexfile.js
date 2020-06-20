@@ -1,18 +1,17 @@
 // Update with your config settings.
+require('dotenv').config();
 const pgconnection = process.env.DATABASE_URL;
+
 
 module.exports = {
 
   development: {
-    client: 'sqlite3',
+    client: 'pg',
     connection: {
-      filename: './dev.sqlite3'
-    },
-    useNullAsDefault: true,
-    pool: {
-      afterCreate: (conn, done) => {
-        conn.run('PRAGMA foreign_keys = ON', done);
-      } 
+      host: 'localhost',
+      database: 'spotify_api',
+      user: 'postgres',
+      password: process.env.DB_PASSWORD.toString()
     },
     migrations: {
       directory: './migrations'
@@ -23,15 +22,8 @@ module.exports = {
   },
 
   production: {
-    client: 'postgres',
+    client: 'pg',
     connection: pgconnection,
-    pool: {
-      min: 2,
-      max: 10,
-      afterCreate: (conn, done) => {
-        conn.run('PRAGMA foreign_keys = ON', done);
-      } 
-    },
     migrations: {
       directory: './migrations'
     },
