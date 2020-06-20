@@ -9,6 +9,17 @@ module.exports = {
       filename: './dev.sqlite3'
     },
     useNullAsDefault: true,
+    pool: {
+      afterCreate: (conn, done) => {
+        conn.run('PRAGMA foreign_keys = ON', done);
+      } 
+    },
+    migrations: {
+      directory: './migrations'
+    },
+    seeds: {
+      directory: './seeds'
+    }
   },
 
   production: {
@@ -16,7 +27,10 @@ module.exports = {
     connection: pgconnection,
     pool: {
       min: 2,
-      max: 10
+      max: 10,
+      afterCreate: (conn, done) => {
+        conn.run('PRAGMA foreign_keys = ON', done);
+      } 
     },
     migrations: {
       directory: './migrations'
