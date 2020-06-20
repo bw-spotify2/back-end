@@ -1,5 +1,6 @@
 # back-end
 
+
 # Schema Design
     https://dbdesigner.page.link/frQxd6GnZvjEjzr78
 
@@ -7,8 +8,8 @@
 
 -----Track Object-----
 
+track: {
 
-{
   song_name: "name of song",
   album_name: "name of album",
   duration_ms: 12341234,
@@ -34,7 +35,7 @@ saved_songs: [{songName: ...}] <--- this will be an array of all of the saved tr
     password: "password!123"
 }
 
-# End Points
+# endpoints
 
 GET SAVED SONGS OF USER
 - get api/savedsongs/{userId}-----------------> returns a saved_songs object based on the user ID see above and a status code of 200
@@ -45,8 +46,6 @@ REGISTER NEW USER
 
 LOGIN
 - post api/login----> send a user object, will return 200 status code on success, jwt
-
-
 
 
 
