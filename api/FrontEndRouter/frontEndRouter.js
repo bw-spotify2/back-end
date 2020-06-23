@@ -49,7 +49,7 @@ frontEndRouter.post('/login', (req, res) => {
                 } else {
                     const token = generateToken(user);
                     req.session.user = user.username;
-                    res.status(200).json({message: "You have successfully logged in, please see your token here", token: token});
+                    res.status(200).json({message: "You have successfully logged in, please see your token here", username:user.username, token: token});
                 }
             })
             .catch(err => {
@@ -62,7 +62,22 @@ frontEndRouter.post('/login', (req, res) => {
 
 // get all saved songs for a user
 frontEndRouter.get('/savedsongs/:username', (req, res) => {
+    const username = req.params.username;
+    if (req.session.username && req.session && req.header.token){
+        dbHelpers.getUserByName(username)
+            .then(user => {
+                if (user.username){
 
+                } else {
+                    res.status(500).json({errorMessage: ``});
+                }
+            })
+            .catch(err => {
+                res.status(500).json({errorMessage: `There was an error with pulling that user from the database: ${err}`})
+            });
+    } else {
+        res.status(400).json({errorMessage: "You are not logged in and cannot access this information"});
+    }
 });
 
 // add a saved song to the user's list
@@ -72,6 +87,11 @@ frontEndRouter.post('/savedsongs/:username', (req, res) => {
 
 frontEndRouter.post('/similarsongs', (req, res) => {
     
+});
+
+// 
+frontEndRouter.post('/findsongsquery', (req, res) => {
+
 });
 
 // This is just a test method to check the users table, need to get rid of this after the site is live
