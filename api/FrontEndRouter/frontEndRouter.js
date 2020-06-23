@@ -63,11 +63,17 @@ frontEndRouter.post('/login', (req, res) => {
 // get all saved songs for a user
 frontEndRouter.get('/savedsongs/:username', (req, res) => {
     const username = req.params.username;
-    if (req.session.username && req.session && req.header.token){
+    if (req.session.user && req.session){
         dbHelpers.getUserByName(username)
             .then(user => {
                 if (user.username){
-
+                    dbHelpers.getSavedSongsByUser(user.id)
+                        .then(savedSongs => {
+                            res.status(200).json(savedSongs);
+                        })
+                        .catch(err => {
+                            res.status(500).json({errorMessage: `There was an error with retrieving the saved songs from the database ${err}`});
+                        })
                 } else {
                     res.status(500).json({errorMessage: ``});
                 }
