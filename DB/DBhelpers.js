@@ -15,6 +15,10 @@ function getUsers(){
     return db('users');
 }
 
+function getUserByName(username){
+    return db('users').first().where('username', '=', username);
+}
+
 function getSavedSongs(){
     return db('saved_songs');
 }
@@ -23,5 +27,6 @@ module.exports = {
     registerUser,
     login,
     getUsers,
-    getSavedSongs
+    getSavedSongs,
+    getUserByName
 }
