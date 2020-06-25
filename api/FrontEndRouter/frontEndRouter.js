@@ -8,6 +8,8 @@ const dbHelpers = require('../../DB/DBhelpers');
 
 const generateToken = require('../../utility/generateJWT');
 
+const spotify = require('../../utility/spotify');
+
 frontEndRouter.post('/register', (req, res) => {
     const credentials = req.body;
     if (credentials.username && credentials.password){
@@ -97,6 +99,14 @@ frontEndRouter.post('/similarsongs', (req, res) => {
 
 // 
 frontEndRouter.post('/findsongsquery', (req, res) => {
+    const keyWords = req.body.keyWords;
+    spotify.getTracks(keyWords)
+        .then(response => {
+            res.status(200).json(response);
+        })
+        .catch(err => {
+            res.status(500).json({errorMessage: `There was an error retriving that info: ${err}`})
+        });
 
 });
 
@@ -121,5 +131,7 @@ frontEndRouter.get('/savedsongs', (req, res) => {
             res.status(500).json({errorMessage: "There was an error with retriving that information from the database"});
         })
 });
+
+
 
 module.exports = frontEndRouter;
