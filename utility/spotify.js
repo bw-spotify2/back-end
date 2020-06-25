@@ -34,8 +34,7 @@ const spotifyAxiosRequestTwo = (token) => {
 }
 
 function getTracks(queryKeywords){
-    let searchedSongs;
-    let queryString = "q=" + queryKeywords.replace(" ", "%20") + "&type=track";
+    let queryString = "q=" + queryKeywords.replace(" ", "%20") + "&type=track&limit=5";
     console.log(queryString);
     let tracksPromise = new Promise((resolve, reject) => {
         spotifyAxiosRequestOne()
@@ -57,4 +56,27 @@ function getTracks(queryKeywords){
     return tracksPromise;
 }
 
-module.exports = {getTracks};
+function getSongAnalysis(spotifySongID){
+    let songAnalysisPromise = new Promise((resolve, reject) => {
+        spotifyAxiosRequestOne()
+        .post('/token', qs.stringify({grant_type: "client_credentials"}))
+        .then(response => {
+            spotifyAxiosRequestTwo(response.data.access_token)
+                .get(`/audio-features/${spotifySongID}`)
+                .then(response2 => {
+                    console.log(response2.data);
+                    resolve(response2.data);
+                })
+                .catch(err => {
+                    reject(`There was an error retrieving the song analysis data from the api ${err}`);
+                });
+        })
+        .catch(err => {
+            reject(`There was an error with running the spotify api call: ${err}`);
+        })
+    });
+
+    return songAnalysisPromise;
+}
+
+module.exports = {getTracks, getSongAnalysis};
