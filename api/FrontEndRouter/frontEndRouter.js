@@ -97,6 +97,18 @@ frontEndRouter.post('/similarsongs', (req, res) => {
     
 });
 
+frontEndRouter.post('/songanalysis', (req, res) => {
+    const songID = req.body.songid;
+
+    spotify.getSongAnalysis(songID)
+        .then(response => {
+            res.status(200).json(response);
+        })
+        .catch(err => {
+            res.status(400).json({errorMessage: `There was an error retrieving that information from the database ${err}`});
+        })
+})
+
 // 
 frontEndRouter.post('/findsongsquery', (req, res) => {
     const keyWords = req.body.keyWords;
