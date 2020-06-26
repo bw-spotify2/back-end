@@ -90,35 +90,52 @@ frontEndRouter.get('/savedsongs/:username', (req, res) => {
 
 // add a saved song to the user's list
 frontEndRouter.post('/savedsongs/:username', (req, res) => {
-
+    const songID = req.body.songID;
+    if(songID && req.session && req.session.user){
+        res.status(200).json({success: "You saved the song!"})
+    } else {
+        res.status(400).json({errorMessage: "You are either not logged in or you did not pass a songID to save"});
+    }
 });
 
 frontEndRouter.post('/similarsongs', (req, res) => {
-    
+    if (req.body.songid){
+        spotify.getSongAnalysis(req.body.songid);
+        // send to ds app and get similar songs back
+        res.status(400).json({successMessage: "Right now we don't have the data returning back from the DS app but this is working!"});
+    } else {
+        res.status(400).json({errorMessage: "Please send the song ID you wish to get similar songs for"});
+    }
 });
 
 frontEndRouter.post('/songanalysis', (req, res) => {
     const songID = req.body.songid;
-
-    spotify.getSongAnalysis(songID)
+    if (req.body.songid){
+        spotify.getSongAnalysis(songID)
         .then(response => {
             res.status(200).json(response);
         })
         .catch(err => {
             res.status(400).json({errorMessage: `There was an error retrieving that information from the database ${err}`});
-        })
+        });
+    } else {
+        res.status(400).json({errorMessage: "Please be sure to provide a song id with that request"})
+    }
 })
 
 // 
 frontEndRouter.post('/findsongsquery', (req, res) => {
-    const keyWords = req.body.keyWords;
-    spotify.getTracks(keyWords)
+    if (req.body.keyWords){
+        spotify.getTracks(req.body.keyWords)
         .then(response => {
             res.status(200).json(response);
         })
         .catch(err => {
             res.status(500).json({errorMessage: `There was an error retriving that info: ${err}`})
         });
+    } else {
+        res.status(400).json({errorMessage: "Please sure to provide the keywords you would like to look up"});
+    }
 
 });
 
