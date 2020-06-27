@@ -68,6 +68,15 @@ frontEndRouter.post('/login', (req, res) => {
     }
 });
 
+frontEndRouter.get('/session', (req, res) => {
+    console.log(req.session);
+    if (req.session.user && req.session){
+        res.status(200).json({sucess: `You have a current session ${req.session.user}`});
+    } else {
+        res.status(400).json({error: "You have no session"})
+    }
+});
+
 // get all saved songs for a user
 frontEndRouter.get('/savedsongs/:username', (req, res) => {
     const username = req.params.username;
