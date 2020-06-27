@@ -56,6 +56,28 @@ function getTracks(queryKeywords){
     return tracksPromise;
 }
 
+function getTrack(spotifySongID){
+    let getTrackPromise = new Promise((resolve, reject) => {
+        spotifyAxiosRequestOne()
+        .post('/token', qs.stringify({grant_type: "client_credentials"}))
+        .then(response => {
+            spotifyAxiosRequestTwo(response.data.access_token)
+            .get(`/tracks/${spotifySongID}`)
+            .then(response2 => {
+                console.log(response2.data);
+                resolve(response2.data);
+            })
+            .catch(err => {
+                reject(`There was an error getting the track from the api ${err}`);
+            })
+        })
+        .catch(err => {
+            reject(`There was an error getting the track from the api ${err}`);
+        })
+    });
+    return getTrackPromise;
+}
+
 function getSongAnalysis(spotifySongID){
     let songAnalysisPromise = new Promise((resolve, reject) => {
         spotifyAxiosRequestOne()
@@ -79,4 +101,4 @@ function getSongAnalysis(spotifySongID){
     return songAnalysisPromise;
 }
 
-module.exports = {getTracks, getSongAnalysis};
+module.exports = {getTracks, getSongAnalysis, getTrack};
