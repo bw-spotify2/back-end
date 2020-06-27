@@ -11,7 +11,7 @@ const server = express();
 // middleware
 server.use(express.json());
 server.use(session(sessionConfig));
-server.use(cors());
+// server.use(cors());
 
 // routers
 server.use('/api/frontend', frontEndRouter);
