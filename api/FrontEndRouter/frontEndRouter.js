@@ -77,7 +77,7 @@ frontEndRouter.get('/savedsongs/:username', (req, res) => {
                             res.status(500).json({errorMessage: `There was an error with retrieving the saved songs from the database ${err}`});
                         })
                 } else {
-                    res.status(500).json({errorMessage: ``});
+                    res.status(500).json({errorMessage: `Could not find that user in the database`});
                 }
             })
             .catch(err => {
@@ -91,8 +91,15 @@ frontEndRouter.get('/savedsongs/:username', (req, res) => {
 // add a saved song to the user's list
 frontEndRouter.post('/savedsongs/:username', (req, res) => {
     const songID = req.body.songID;
-    if(songID && req.session && req.session.user){
-        res.status(200).json({success: "You saved the song!"})
+    if(req.body.songID && req.session && req.session.user){
+        spotify.getTrack(songID)
+            .then(response => {
+                // track id, album name, album art, song url,
+                res.status(200).json(response);
+            })
+            .catch(err => {
+                res.status(500).json({errorMessage: `There was an error getting the song saved ${err}`});
+            })
     } else {
         res.status(400).json({errorMessage: "You are either not logged in or you did not pass a songID to save"});
     }
