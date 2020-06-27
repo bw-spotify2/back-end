@@ -1,5 +1,6 @@
 const express = require('express');
 const session = require('express-session');
+const cors = require('cors');
 const sessionConfig = require('../utility/sessionsConfig');
 
 const frontEndRouter = require('./FrontEndRouter/frontEndRouter');
@@ -10,6 +11,7 @@ const server = express();
 // middleware
 server.use(express.json());
 server.use(session(sessionConfig));
+server.use(cors());
 
 // routers
 server.use('/api/frontend', frontEndRouter);
