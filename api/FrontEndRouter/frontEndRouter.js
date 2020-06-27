@@ -51,7 +51,13 @@ frontEndRouter.post('/login', (req, res) => {
                 } else {
                     const token = generateToken(user);
                     req.session.user = user.username;
-                    res.status(200).json({message: "You have successfully logged in, please see your token here", username:user.username, token: token});
+                    req.session.save((err) => {
+                        if (err){
+                            res.status(500).json({errorMessage: `There was an error saving the session ${err}`});
+                        } else {
+                            res.status(200).json({message: "You have successfully logged in, please see your token here", username:user.username, token: token});
+                        }
+                    });
                 }
             })
             .catch(err => {
