@@ -6,6 +6,7 @@ const sessionConfig = {
     cookie: {
         maxAge: (1 * 60 * 60 * 1000),
         secure: false, // need to change to true after development
+        sameSite: "none",
     },
     httpOnly: true, // no js allowed to read
     resave: false,
