@@ -5,7 +5,7 @@ const sessionConfig = {
     secret: 'for your eyes only',
     cookie: {
         maxAge: (1 * 60 * 60 * 1000),
-        secure: true, // need to change to true after development
+        secure: false, // need to change to true after development
     },
     httpOnly: true, // no js allowed to read
     resave: false,
